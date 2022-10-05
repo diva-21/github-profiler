@@ -6,13 +6,14 @@ const search = document.getElementById('search')
 
 async function getUser(username) {
     try {
+        // fetching from api
         const { data } = await axios(APIURL + username)
 
         createUserCard(data)
         getRepos(username)
     } catch(err) {
         if(err.response.status == 404) {
-            createErrorCard('No profile with this username')
+            createErrorCard('Not a valid user')
         }
     }
 }
@@ -30,6 +31,8 @@ async function getRepos(username) {
 function createUserCard(user) {
     const userID = user.name || user.login
     const userBio = user.bio ? `<p>${user.bio}</p>` : ''
+     // card format is img,name,bio and list of repos
+    
     const cardHTML = `
     <div class="card">
     <div>
@@ -68,13 +71,14 @@ function addReposToCard(repos) {
     repos
         .slice(0, 5)
         .forEach(repo => {
-            const repoEl = document.createElement('a')
-            repoEl.classList.add('repo')
-            repoEl.href = repo.html_url
-            repoEl.target = '_blank'
-            repoEl.innerText = repo.name
+        // creating a list of anchor tags and adding its attributes
+            const atag = document.createElement('a')
+            atag.classList.add('repo')
+            atag.href = repo.html_url
+            atag.target = '_blank'
+            atag.innerText = repo.name
 
-            reposEl.appendChild(repoEl)
+            reposEl.appendChild(atag)
         })
 }
 
